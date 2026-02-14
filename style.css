@@ -1702,10 +1702,6 @@ html, body {
   overscroll-behavior-y: none; /* iOS のゴムスク抑制（モーダル時の背景スクロール防止に効く） */
 }
 
-/* ローディング全面背景をdvhベースに */
-#loading-screen {
-  min-height: calc(var(--vh, 1vh) * 100);
-}
 
 /* 置き換え：前回の .ios-standalone .sticky-search-area を削除して、これを入れる */
 .ios-standalone .sticky-search-area {
@@ -3777,7 +3773,10 @@ html.is-standalone .site-footer {
 html.is-standalone .pwa-bottom-nav {
   display: flex;
   position: fixed;
-  bottom: 0;
+  /* ▼ bottomの代わりに top(上) から距離を計算して配置し、iOSバグを回避 ▼ */
+  top: calc(100vh - 60px - var(--safe-bottom, 0px));
+  top: calc(100dvh - 60px - var(--safe-bottom, 0px));
+  bottom: auto;
   left: 0;
   right: 0;
   /* ナビバーの高さ定義 (メインコンテンツのpadding-bottomと一致) */
