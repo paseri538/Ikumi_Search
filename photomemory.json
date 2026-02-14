@@ -86,7 +86,7 @@
   "25": {
     "title": "『藤原夏海とディズニーシー』",
     "links": [
-      { "label": "「年始に藤原夏海とディズニーシーに行った」思い出 ", "url": "https://x.com/Ikumi_Radio/status/1884186154184130617?s=20" }
+      { "label": "ディズニーシーに行った思い出 ", "url": "https://x.com/Ikumi_Radio/status/1884186154184130617?s=20" }
     ]
   },
 
@@ -168,6 +168,15 @@
     ]
   },
 
+  "59": {
+    "title": "『ROCK IN JAPAN FESTIVAL 2025』",
+    "links": [
+      { "label": "『ROCK IN JAPAN FESTIVAL 2025』の思い出①", "url": "https://x.com/Ikumi_Radio/status/1970435220945121341?s=20" },
+      { "label": "『ROCK IN JAPAN FESTIVAL 2025』の思い出②", "url": "https://x.com/Ikumi_Radio/status/1970436479496175931?s=20" },
+      { "label": "『ROCK IN JAPAN FESTIVAL 2025』の思い出③", "url": "https://x.com/Ikumi_Radio/status/1970437234336899239?s=20" }
+    ]
+  },
+
   "61": {
     "title": "『京都国際マンガ・アニメフェア（京まふ）2025』",
     "links": [
@@ -188,6 +197,22 @@
     "title": "『水野朔 長谷川育美の生明祭さくいく日和』",
     "links": [
       { "label": "『水野朔 長谷川育美の生明祭さくいく日和』の思い出", "url": "https://x.com/Ikumi_Radio/status/1993266665015091424?s=20" }
+    ]
+  },
+
+  "72": {
+    "title": "『KESSOKUBAND LIVE in KOREA From Shimokitazawa』",
+    "links": [
+      { "label": "『KESSOKUBAND LIVE in KOREA From Shimokitazawa』の思い出①", "url": "https://x.com/Ikumi_Radio/status/2003413020102517051?s=20" },
+      { "label": "『KESSOKUBAND LIVE in KOREA From Shimokitazawa』の思い出②", "url": "https://x.com/Ikumi_Radio/status/2003414781651484689?s=20" }
+    ]
+  },
+
+  "76": {
+    "title": "『年末年始』",
+    "links": [
+      { "label": "年末年始の思い出①<br>ディズニーシー", "url": "https://x.com/Ikumi_Radio/status/2013557615478153277?s=20" },
+      { "label": "年末年始の思い出②<br>シール帳", "url": "https://x.com/Ikumi_Radio/status/2013558873534152831?s=20" }
     ]
   }
 }

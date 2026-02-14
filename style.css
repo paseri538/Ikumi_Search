@@ -3687,27 +3687,27 @@ b, strong,
 /* --- 各テーマカラーへの対応 --- */
 
 /* ダークモード */
-.is-standalone.dark-mode .pwa-bottom-nav {
+html.is-standalone body.dark-mode .pwa-bottom-nav {
   background-color: #252c35;
   border-top-color: #394150;
   box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.2);
 }
-.is-standalone.dark-mode .pwa-bottom-nav-btn {
+html.is-standalone body.dark-mode .pwa-bottom-nav-btn {
   color: #8ca2b3;
 }
-.is-standalone.dark-mode .pwa-bottom-nav-btn.is-active {
+html.is-standalone body.dark-mode .pwa-bottom-nav-btn.is-active {
   color: #ffffff;
 }
 
 /* その他のカラーテーマ */
-.is-standalone[class*="theme-"] .pwa-bottom-nav {
+html.is-standalone body[class*="theme-"] .pwa-bottom-nav {
   background-color: var(--card-bg);
   border-top-color: var(--history-card-bd);
 }
-.is-standalone[class*="theme-"] .pwa-bottom-nav-btn {
+html.is-standalone body[class*="theme-"] .pwa-bottom-nav-btn {
   color: var(--muted);
 }
-.is-standalone[class*="theme-"] .pwa-bottom-nav-btn.is-active {
+html.is-standalone body[class*="theme-"] .pwa-bottom-nav-btn.is-active {
   color: var(--btn-main);
 }
 

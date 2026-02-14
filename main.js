@@ -1422,9 +1422,18 @@ function setupThemeSwitcher() {
     // 許可されていないテーマなら強制的にlightにする
     if (!allowedThemes.includes(themeName)) themeName = 'light';
 
+    // bodyとhtmlの両方からクラスを削除
     document.body.classList.remove(...allThemeClasses);
-    if (themeName === 'dark') document.body.classList.add('dark-mode');
-    else if (themeName === 'red') document.body.classList.add('theme-red');
+    document.documentElement.classList.remove(...allThemeClasses);
+
+    // 選択されたテーマのクラスをbodyとhtmlの両方に付与
+    if (themeName === 'dark') {
+      document.body.classList.add('dark-mode');
+      document.documentElement.classList.add('dark-mode');
+    } else if (themeName === 'red') {
+      document.body.classList.add('theme-red');
+      document.documentElement.classList.add('theme-red');
+    }
     
     panel.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
     panel.querySelector(`.theme-btn[data-theme="${themeName}"]`)?.classList.add('active');
