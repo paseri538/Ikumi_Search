@@ -18,36 +18,14 @@
             color = '#22272e';
             statusBarStyle = 'black-translucent';
             bodyBg = color;
-            break;
-          case 'pink':
-            color = '#ff6496';
-            statusBarStyle = 'black-translucent';
-            bodyBg = color;
-            ballColor = '#ffffff';
-            break;
-          case 'yellow':
-            color = '#fabe00';
-            statusBarStyle = 'default';
-            bodyBg = color;
-            ballColor = '#ffffff';
-            break;
-          case 'blue':
-            color = '#006ebe';
-            statusBarStyle = 'black-translucent';
-            bodyBg = color;
-            ballColor = '#ffffff';
+            document.documentElement.classList.add('dark-mode'); // ★追加
             break;
           case 'red':
             color = '#e60046';
             statusBarStyle = 'black-translucent';
             bodyBg = color;
             ballColor = '#ffffff';
-            break;
-          case 'green':
-            color = '#13a286';
-            statusBarStyle = 'black-translucent';
-            bodyBg = color;
-            ballColor = '#ffffff';
+            document.documentElement.classList.add('theme-red'); // ★追加
             break;
         }
 

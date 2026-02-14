@@ -3760,13 +3760,13 @@ html.is-standalone .site-footer {
 
 /* --- 100vh問題対策 & ロード画面修正 --- */
 #loading-screen {
-  /* ★修正2: ロード画面の重なり順を最強にして、ナビバーが透けるのを防ぐ */
   z-index: 2147483647 !important; 
-  
-  /* 高さの計算をより厳密に */
-  height: 100vh;      /* フォールバック */
-  height: 100dvh;     /* アドレスバー等を考慮した動的な高さ */
-  min-height: 100%;
+  /* ▼高さ指定を削除し、四隅を画面に完全固定する▼ */
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
 }
 
 /* --- PWA専用 下部ナビゲーション --- */
@@ -3789,6 +3789,10 @@ html.is-standalone .pwa-bottom-nav {
   box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.06);
   z-index: 3000;
   transition: transform 0.25s ease-in-out;
+
+  /* ▼▼▼ 追加: iOSの固定位置バグ(浮き上がり)を防ぐ ▼▼▼ */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 /* モーダル表示中はナビバーを隠す (操作干渉防止) */
