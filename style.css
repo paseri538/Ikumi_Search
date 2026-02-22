@@ -5673,19 +5673,15 @@ body[class*="theme-"] .photo-link-btn {
 }
 
 
-
-
-
-
 /* =================================================== */
-/* ★★★ フォトメモリー機能用スタイル (色修正・確定版) ★★★ */
+/* ★★★ フォトメモリー機能用スタイル (修正版) ★★★ */
 /* =================================================== */
 
 /* 1. カメラボタン（お気に入りボタンと位置・サイズを統一） */
 .photo-link-btn {
     position: absolute;
     bottom: 10px;
-    right: 10px; /* お気に入りボタンと同じ位置 */
+    right: 10px;
     z-index: 10;
     
     width: 34px;
@@ -5698,7 +5694,6 @@ body[class*="theme-"] .photo-link-btn {
     cursor: pointer;
     transition: all 0.2s ease;
     
-    /* デフォルト（ライトモード） */
     background-color: #fff;
     border: 1px solid #e6e6f3;
     color: #333742;
@@ -5716,9 +5711,7 @@ body[class*="theme-"] .photo-link-btn {
 }
 .photo-link-btn:active { transform: scale(0.95); }
 
-/* --- カメラボタン：テーマ別配色 --- */
-
-/* ダークモード */
+/* --- テーマ別配色 --- */
 body.dark-mode .photo-link-btn {
     background-color: #2a2f37 !important;
     border: 1px solid #41505f !important;
@@ -5731,7 +5724,6 @@ body.dark-mode .photo-link-btn {
     }
 }
 
-/* カラーテーマ（赤・青など） */
 body[class*="theme-"] .photo-link-btn {
     background-color: var(--btn-bg) !important;
     border-color: var(--history-card-bd) !important;
@@ -5746,7 +5738,7 @@ body[class*="theme-"] .photo-link-btn {
 }
 
 
-/* 2. フォトリンクモーダル (背景色・文字色修正) */
+/* 2. フォトリンクモーダル */
 #photo-links-modal {
     position: fixed;
     top: 0;
@@ -5772,7 +5764,10 @@ body[class*="theme-"] .photo-link-btn {
 /* モーダルコンテンツ（カード部分） */
 .photo-links-content {
     width: 90%;
+    
+    /* ★修正: スマホは400pxのまま、PC/iPadでは下部のメディアクエリで上書きされます */
     max-width: 400px;
+    
     border-radius: 16px;
     padding: 32px 24px 28px;
     position: relative;
@@ -5781,25 +5776,32 @@ body[class*="theme-"] .photo-link-btn {
     text-align: center;
     box-shadow: 0 10px 40px rgba(0,0,0,0.3);
     
-    /* デフォルト（ライトモード） */
     background: #ffffff;
     border: 1px solid rgba(0,0,0,0.05);
+
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
 }
+
+/* ★追加: PC・iPad（幅768px以上）の時は横幅を広げる */
+@media (min-width: 768px) {
+  .photo-links-content {
+    max-width: 500px; /* ここでお好みの幅(例:500px)に設定 */
+  }
+}
+
 #photo-links-modal.active .photo-links-content {
     transform: scale(1);
 }
 
-/* --- モーダル背景：テーマ別配色 --- */
-
-/* ダークモード */
+/* --- テーマ別配色 --- */
 body.dark-mode .photo-links-content {
-    background: #2d333b !important; /* ダークグレー */
+    background: #2d333b !important;
     border: 1px solid #394150 !important;
 }
-
-/* カラーテーマ */
 body[class*="theme-"] .photo-links-content {
-    background: var(--card-bg) !important; /* テーマ色 (例: 赤) */
+    background: var(--card-bg) !important;
     border: 1px solid var(--history-card-bd) !important;
 }
 
@@ -5814,8 +5816,6 @@ body[class*="theme-"] .photo-links-content {
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 16px; cursor: pointer; transition: 0.2s;
-    
-    /* デフォルト */
     background: transparent;
     border: 1px solid #e6e6f3;
     color: #888;
@@ -5825,7 +5825,6 @@ body[class*="theme-"] .photo-links-content {
     color: #6654e8;
 }
 
-/* ダークモード */
 body.dark-mode .close-modal-btn {
     border-color: #41505f !important;
     color: #a0b0c0 !important;
@@ -5835,7 +5834,6 @@ body.dark-mode .close-modal-btn:hover {
     color: #fff !important;
 }
 
-/* カラーテーマ */
 body[class*="theme-"] .close-modal-btn {
     border-color: rgba(255,255,255,0.3) !important;
     color: rgba(255,255,255,0.8) !important;
@@ -5846,50 +5844,47 @@ body[class*="theme-"] .close-modal-btn:hover {
 }
 
 
-/* 4. タイトル「フォトリンク」 */
+/* 4. タイトル */
 .photo-links-content h3 {
     margin: 0 0 20px;
     font-size: 1.2rem;
     font-weight: 700;
-    
-    /* デフォルト */
     color: #333;
+    flex-shrink: 0;
 }
-/* ダークモード */
-body.dark-mode .photo-links-content h3 {
-    color: #e5ecec !important;
-}
-/* カラーテーマ */
-body[class*="theme-"] .photo-links-content h3 {
-    color: #fff !important;
-}
+body.dark-mode .photo-links-content h3 { color: #e5ecec !important; }
+body[class*="theme-"] .photo-links-content h3 { color: #fff !important; }
 
 
 /* 5. リンクボタン（リスト） */
 #photo-links-list {
     list-style: none; padding: 0; margin: 0;
     display: flex; flex-direction: column; gap: 10px;
+    overflow-y: auto;
+    flex-grow: 1;
+    padding-right: 4px;
 }
 
 .photo-link-item {
     display: flex;
     align-items: center;
-    justify-content: center; /* 中央揃え */
+    justify-content: flex-start;
     padding: 12px 16px;
     border-radius: 12px;
     text-decoration: none !important;
     font-weight: 700;
     font-size: 1rem;
-    transition: transform 0.15s, background 0.15s, color 0.15s;
     
-    /* デフォルト */
+    /* ★修正: transform を transition から除外（念のため） */
+    transition: background 0.15s, color 0.15s;
+    
     background-color: #ffffff;
     border: 1px solid #e6e6f3;
     color: #333;
+    text-align: left;
 }
 .photo-link-item:active { transform: scale(0.98); }
 
-/* アイコン */
 .photo-link-item i {
     font-size: 1.2em;
     margin-right: 8px;
@@ -5903,12 +5898,14 @@ body[class*="theme-"] .photo-links-content h3 {
         background-color: #f0f8ff;
         border-color: #6654e8;
         color: #6654e8;
-        transform: translateY(-2px);
+        
+        /* ★修正: 上に動く指定 (transform: translateY) を削除し、明示的に none に指定 */
+        transform: none;
     }
     .photo-link-item:hover i { color: #6654e8; }
 }
 
-/* --- リンクボタン：テーマ別配色 --- */
+/* --- テーマ別配色 --- */
 
 /* ダークモード */
 body.dark-mode .photo-link-item {
@@ -5924,13 +5921,14 @@ body.dark-mode .photo-link-item i {
         background-color: #364152 !important;
         border-color: #8de0ee !important;
         color: #8de0ee !important;
+        /* ダークモードホバー時も動かないようにする */
+        transform: none !important;
     }
     body.dark-mode .photo-link-item:hover i { color: #8de0ee !important; }
 }
 
 /* カラーテーマ */
 body[class*="theme-"] .photo-link-item {
-    /* ボタン背景は薄くする（または白） */
     background-color: rgba(0,0,0,0.2) !important;
     border-color: rgba(255,255,255,0.3) !important;
     color: #fff !important;
@@ -5942,7 +5940,9 @@ body[class*="theme-"] .photo-link-item i {
     body[class*="theme-"] .photo-link-item:hover {
         background-color: #fff !important;
         border-color: #fff !important;
-        color: var(--card-bg) !important; /* テキストをテーマ色に */
+        color: var(--card-bg) !important;
+        /* テーマカラーホバー時も動かないようにする */
+        transform: none !important;
     }
     body[class*="theme-"] .photo-link-item:hover i {
         color: var(--card-bg) !important;

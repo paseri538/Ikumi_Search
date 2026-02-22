@@ -20,7 +20,8 @@ let clearAutocompleteSuggestions = () => {};
 let isSearchTriggered = false;
 let historyData = [];
 let photoMemoryData = {};
-let dokokaraData = {}; // ★追加: 「どこから」データ用変数
+let dokokaraData = {}; 
+let onshotData = [];  
 
 const FAV_KEY = 'str_favs_v1';
 let favorites = loadFavs();
@@ -357,13 +358,14 @@ function findDidYouMean(query) {
  */
 async function loadExternalData() {
   try {
-    const [episodesRes, readingsRes, keywordsRes, historyRes, pmRes, dkRes] = await Promise.all([
+    const [episodesRes, readingsRes, keywordsRes, historyRes, pmRes, dkRes, osRes] = await Promise.all([
       fetch('episodes.json'),
       fetch('readings.json'),
       fetch('keywords.json'),
       fetch('history.json'),
       fetch('photomemory.json'),
-      fetch('dokokara.json')
+      fetch('dokokara.json'),
+      fetch('onshot.json').catch(() => null) // ★★★ ここに追加 ★★★
     ]);
     const episodesData = await episodesRes.json();
     const readingsData = await readingsRes.json();
@@ -382,7 +384,14 @@ async function loadExternalData() {
   } catch (e) {
     console.warn("dokokara.json loading failed", e);
     dokokaraData = {};
-}
+  }
+
+  try {
+      if (osRes) onshotData = await osRes.json();
+    } catch (e) {
+      console.warn("onshot.json loading failed", e);
+      onshotData = [];
+    }
 
     data = episodesData.map(ep => {
       const keywordsWithoutTimestamp = (ep.keywords || []).map(stripTimeSuffix);
@@ -629,16 +638,11 @@ function getFilteredData(query) {
   if (selectedCategories.length) {
       res = res.filter(it => {
           return selectedCategories.some(cat => {
-              // 1. データ側のカテゴリを取得（配列化して統一）
+              // データ側のカテゴリを取得（配列化して統一）
               const itemCats = Array.isArray(it.category) ? it.category : [it.category];
               
-              // 2. カテゴリ配列の中に、選択されたカテゴリ(cat)が含まれているか？
-              const isCatMatch = itemCats.includes(cat);
-
-              // 3. または、検索用テキストにカテゴリ名が含まれているか？
-              const isTextMatch = it.searchText.includes(cat);
-
-              return isCatMatch || isTextMatch;
+              // カテゴリ配列の中に、選択されたカテゴリ(cat)が含まれているかのみで判定
+              return itemCats.includes(cat);
           });
       });
   }
@@ -2036,16 +2040,25 @@ window.addEventListener('resize', () => {
   }, 200);
 }, { passive: true });
 
-/* --- フォトリンクモーダル表示関数 (URL判定版) --- */
-function openPhotoLinksModal(button) {
-  const linksDataStr = button.getAttribute('data-links');
-  if (!linksDataStr) return;
-
+/* --- フォトリンクモーダル表示関数 (アップグレード版) --- */
+function openPhotoLinksModal(buttonOrData, customTitle = 'フォトメモリンク') {
   let links = [];
-  try {
-      links = JSON.parse(linksDataStr.replace(/&quot;/g, '"'));
-  } catch (e) {
-      console.error("JSON parse error:", e);
+
+  // ボタンから呼ばれた場合（通常のフォトメモリー）
+  if (buttonOrData instanceof HTMLElement) {
+      const linksDataStr = buttonOrData.getAttribute('data-links');
+      if (!linksDataStr) return;
+      try {
+          links = JSON.parse(linksDataStr.replace(/&quot;/g, '"'));
+      } catch (e) {
+          console.error("JSON parse error:", e);
+          return;
+      }
+  } 
+  // データ配列が直接渡された場合（オンショット）
+  else if (Array.isArray(buttonOrData)) {
+      links = buttonOrData;
+  } else {
       return;
   }
 
@@ -2054,33 +2067,28 @@ function openPhotoLinksModal(button) {
   
   if (!modal || !listContainer) return;
 
-  // タイトルを追加 (なければ作成)
+  // タイトルを追加・上書き
   let titleEl = modal.querySelector('h3');
   if (!titleEl) {
       titleEl = document.createElement('h3');
-      titleEl.textContent = 'フォトメモリンク';
       const content = modal.querySelector('.photo-links-content');
       if(content) content.insertBefore(titleEl, listContainer);
   }
+  titleEl.textContent = customTitle; // タイトルを動的に変更！
   
   listContainer.innerHTML = '';
 
   links.forEach(link => {
-      // ★ここが修正ポイント: URLもチェック対象にする
       const lowerLabel = (link.label || "").toLowerCase();
       const lowerUrl = (link.url || "").toLowerCase();
 
       let serviceClass = 'default';
       let iconClass = 'fa-solid fa-link';
 
-      // ▼ ラベル名 または URLの中身 で色を決めるロジック
       if (lowerLabel.includes('instagram') || lowerUrl.includes('instagram.com')) {
           serviceClass = 'instagram';
           iconClass = 'fa-brands fa-instagram';
-      } else if (
-          lowerLabel.includes('twitter') || lowerLabel.includes('x') || 
-          lowerUrl.includes('twitter.com') || lowerUrl.includes('x.com')
-      ) {
+      } else if (lowerLabel.includes('twitter') || lowerLabel.includes('x') || lowerUrl.includes('twitter.com') || lowerUrl.includes('x.com')) {
           serviceClass = 'twitter';
           iconClass = 'fa-brands fa-x-twitter';
       } else if (lowerLabel.includes('tiktok') || lowerUrl.includes('tiktok.com')) {
@@ -2103,8 +2111,70 @@ function openPhotoLinksModal(button) {
   });
 
   modal.classList.add('active');
-  
   modal.onclick = (e) => {
     if (e.target === modal) modal.classList.remove('active');
   };
 }
+
+// ★★★ オンショットボタンのクリックイベント ★★★
+document.addEventListener('DOMContentLoaded', () => {
+  const onshotToggle = document.getElementById('onshotToggle');
+  if (onshotToggle) {
+    onshotToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (onshotData && onshotData.length > 0) {
+        openPhotoLinksModal(onshotData, 'スタジオオンショット');
+      } else {
+        alert('現在登録されているオンショットはありません。');
+      }
+    });
+  }
+});
+
+
+/* =================================================== */
+/* ★★★ キーボード左右キーによるページネーション操作 ★★★ */
+/* =================================================== */
+document.addEventListener('keydown', function(event) {
+    // 1. 検索ボックスやドロップダウンなどの「入力フォーム」を操作中の場合は無効化
+    const activeEl = document.activeElement;
+    if (activeEl && ['INPUT', 'TEXTAREA', 'SELECT'].includes(activeEl.tagName)) {
+        return;
+    }
+
+    // 2. 詳細フィルター（ドロワー）やモーダルが開いている時も無効化
+    const filterDrawer = document.getElementById('filterDrawer');
+    const isDrawerOpen = filterDrawer && (filterDrawer.style.display === 'block' || filterDrawer.classList.contains('show'));
+    const isModalOpen = document.body.classList.contains('body-scroll-locked') || document.body.classList.contains('modal-open');
+    if (isDrawerOpen || isModalOpen) return;
+
+    // 3. 現在アクティブ（選択中）なページボタンを探す
+    const activeBtn = document.querySelector('#paginationArea .page-btn.active');
+    if (!activeBtn) return; // ページネーションがない場合は何もしない
+
+    // ページネーションエリア内にあるすべてのボタンを取得
+    const allBtns = Array.from(document.querySelectorAll('#paginationArea button'));
+    const activeIndex = allBtns.indexOf(activeBtn);
+
+    // 4. キー入力に応じた処理
+    if (event.key === 'ArrowRight') {
+        // 【右キー】次のページへ
+        // 現在のボタンより「右側」にある、クリック可能な最初のボタンを押す
+        for (let i = activeIndex + 1; i < allBtns.length; i++) {
+            // 無効化されているボタンや、「...」のような省略ボタン(.more-btn)は飛ばす
+            if (!allBtns[i].disabled && !allBtns[i].classList.contains('more-btn')) {
+                allBtns[i].click();
+                break;
+            }
+        }
+    } else if (event.key === 'ArrowLeft') {
+        // 【左キー】前のページへ
+        // 現在のボタンより「左側」にある、クリック可能な最初のボタンを押す
+        for (let i = activeIndex - 1; i >= 0; i--) {
+            if (!allBtns[i].disabled && !allBtns[i].classList.contains('more-btn')) {
+                allBtns[i].click();
+                break;
+            }
+        }
+    }
+});

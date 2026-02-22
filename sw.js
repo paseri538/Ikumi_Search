@@ -1,5 +1,5 @@
 // キャッシュの名前を定義。バージョンを更新すると古いキャッシュは自動的に削除。
-const SW_VERSION = '20260215e'; // ★バージョンを更新
+const SW_VERSION = '20260222a'; // ★バージョンを更新
 const CACHE_NAME = `radio-cache-${SW_VERSION}`;
 
 
@@ -15,6 +15,7 @@ const CORE_ASSETS = [
   'history.json',
   'photomemory.json',
   'dokokara.json',
+  'onshot.json',
   'logo.png',
   'favicon.ico',
   'apple-touch-icon.png',
@@ -30,6 +31,7 @@ const THUMBNAIL_ASSETS = [
   'thumbnails/お手元3.jpg',
   'thumbnails/お手元4.jpg',
 
+  'thumbnails/80.jpg',
   'thumbnails/79.jpg',
   'thumbnails/78.jpg',
   'thumbnails/77.jpg',
