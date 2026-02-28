@@ -5948,3 +5948,190 @@ body[class*="theme-"] .photo-link-item i {
         color: var(--card-bg) !important;
     }
 }
+
+/* ======================================================================== */
+/* ===== PC版: フィルターの左サイドバー常時表示化 (黄金比＆完全再現版) ===== */
+/* ======================================================================== */
+
+@media (min-width: 992px) {
+  /* --- 1. 全体の最大幅を広げる (1160px -> 1300px) --- */
+  .main-content,
+  .search-card,
+  .filters-bar,
+  .results-count-under-bar {
+    max-width: 1300px !important;
+  }
+
+  /* --- 2. フィルター開閉ボタンなどを非表示 --- */
+  #filterToggleBtn,
+  .drawer-backdrop,
+  #filterDrawer .drawer-footer {
+    display: none !important;
+  }
+
+  /* --- 3. 上部ボタンの幅を均等に調整 --- */
+  #favOnlyToggleBtn, 
+  #randomBtn, 
+  .reset-btn {
+    width: calc(16.6% - 8px) !important;
+  }
+
+  /* --- 4. フィルタドロワーを左固定のサイドバーに変換 --- */
+  #filterDrawer {
+    display: block !important;
+    position: fixed !important;
+    top: calc(var(--header-offset) + 2px) !important;
+    
+    width: 280px !important;
+    height: calc(100vh - var(--header-offset) - 20px) !important;
+    
+    left: 50% !important;
+    margin-left: -650px !important;
+    
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 20px 20px 5px !important;
+    overflow-y: auto !important;
+    z-index: 100 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  @media (max-width: 1320px) {
+    #filterDrawer {
+      left: 10px !important;
+      margin-left: 0 !important;
+    }
+  }
+
+  body[class*="theme-"] #filterDrawer,
+  body.dark-mode #filterDrawer {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  #filterDrawer::-webkit-scrollbar {
+    width: 6px;
+  }
+  #filterDrawer::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+  }
+  body.dark-mode #filterDrawer::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  /* --- 5. ボタンを1列に並べ、「さーち・ざ・らじお！」のオリジナルサイズに完全一致 --- */
+  #filterDrawer .filter-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  /* ★修正: クラス名に依存せず、すべてのフィルターボタンにオリジナルサイズを一括適用 */
+  #filterDrawer .filter-grid button {
+    min-height: 41.3px !important;
+    padding: 8px 0 !important;
+    font-size: 1.01em !important;
+    line-height: normal !important;
+  }
+
+  /* コーナーボタン特有のオリジナル余白と行間だけ上書き */
+  #filterDrawer .btn-corner {
+    padding: 9px 2px 8px 2px !important;
+    font-size: 0.97em !important;
+    line-height: 1.2 !important;
+  }
+
+  /* --- 6. メインコンテンツの配置を調整 --- */
+  .main-content {
+    padding-left: 305px !important;
+    padding-right: 15px !important;
+  }
+}
+
+/* ======================================================================== */
+/* ===== iPad・スマホ版: フィルター内のカラーをPC版と完全に統一 ===== */
+/* ======================================================================== */
+
+@media (max-width: 991px) {
+  body[class*="theme-"] #filterDrawer {
+    background-color: var(--bg-color) !important;
+    border-color: var(--bg-color) !important;
+  }
+}
+
+/* ★修正: クラス名に依存せず、全ボタンの非選択時の枠線を透明に */
+body[class*="theme-"] #filterDrawer .filter-grid button:not(.active):not([aria-pressed="true"]) {
+  border-color: transparent !important;
+}
+
+/* ======================================================================== */
+/* ===== カラーテーマ適用時のフィルターボタン・プルダウン視認性修正 ===== */
+/* ======================================================================== */
+
+/* ★修正: buttonだけでなく、select（プルダウン）も対象に追加しました */
+body[class*="theme-"] #filterDrawer .filter-grid button,
+body[class*="theme-"] #filterDrawer .filter-grid select {
+  background-color: var(--card-bg) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: var(--text-color) !important;
+}
+
+/* ======================================================================== */
+/* ===== カラーテーマ: フィルターボタン選択時（アクティブ）の反転修正 ===== */
+/* ======================================================================== */
+
+/* ★修正: buttonとselectの両方に適用 */
+body[class*="theme-"] #filterDrawer .filter-grid button.active,
+body[class*="theme-"] #filterDrawer .filter-grid button[aria-pressed="true"],
+body[class*="theme-"] #filterDrawer .filter-grid select:focus {
+  background-color: #ffffff !important;
+  color: var(--bg-color) !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 0 2.5px rgba(255, 255, 255, 0.4) !important;
+}
+
+@media (hover: hover) {
+  body[class*="theme-"] #filterDrawer .filter-grid button.active:hover,
+  body[class*="theme-"] #filterDrawer .filter-grid button[aria-pressed="true"]:hover {
+    background-color: #ffffff !important;
+    color: var(--bg-color) !important;
+    border-color: #ffffff !important;
+  }
+}
+
+/* ======================================================================== */
+/* ===== フィルターボタン・プルダウンのホバー挙動を完全に統一 ===== */
+/* ======================================================================== */
+
+/* ★修正: ホバー時の挙動にも select を追加 */
+@media (hover: hover) {
+  #filterDrawer .filter-grid button:not(.active):not([aria-pressed="true"]):hover,
+  #filterDrawer .filter-grid select:not(.active):not([aria-pressed="true"]):hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  body:not(.dark-mode):not([class*="theme-"]) #filterDrawer .filter-grid button:not(.active):not([aria-pressed="true"]):hover,
+  body:not(.dark-mode):not([class*="theme-"]) #filterDrawer .filter-grid select:not(.active):not([aria-pressed="true"]):hover {
+    background-color: #f5f7fa !important;
+    border-color: #d0d7de !important;
+    color: var(--text-color) !important;
+  }
+
+  body.dark-mode #filterDrawer .filter-grid button:not(.active):not([aria-pressed="true"]):hover,
+  body.dark-mode #filterDrawer .filter-grid select:not(.active):not([aria-pressed="true"]):hover {
+    background-color: #27343b !important;
+    border-color: #4a5967 !important;
+    color: #ffffff !important;
+  }
+
+  body[class*="theme-"] #filterDrawer .filter-grid button:not(.active):not([aria-pressed="true"]):hover,
+  body[class*="theme-"] #filterDrawer .filter-grid select:not(.active):not([aria-pressed="true"]):hover {
+    background-color: var(--filter-btn-active) !important;
+    border-color: var(--btn-main) !important;
+    color: var(--text-color) !important;
+  }
+}
