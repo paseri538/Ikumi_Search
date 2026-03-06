@@ -556,10 +556,17 @@ async function initializeApp() {
 
       // ローディング画面をフェードアウトさせる共通関数
       const hideLoadingScreen = () => {
-        loadingScreen.classList.add('fadeout');
+        // ★フェードアウトを開始するまでの「待機時間」を追加
+        // ここを 800 にすると、フォントが即座に読み込まれても最低0.8秒はロゴを表示します
         setTimeout(() => {
-          loadingScreen.style.setProperty('display', 'none', 'important');
-        }, 1000);
+          loadingScreen.classList.add('fadeout');
+          
+          // フェードアウトのアニメーション（1秒）が終わったら要素を完全に消す
+          setTimeout(() => {
+            loadingScreen.style.setProperty('display', 'none', 'important');
+          }, 1000);
+          
+        }, 1000); // ← ★ここの数値を調整してください（1000 = 1秒、1500 = 1.5秒）
       };
 
       const htmlEl = document.documentElement;
