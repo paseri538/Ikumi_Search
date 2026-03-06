@@ -549,19 +549,40 @@ async function initializeApp() {
     console.error("初期化中にエラーが発生しました:", error);
     // エラー時でも画面操作ができるようにアラート等は出さずログのみ残す
   } finally {
-    // 5. ローディング画面を消す（成功・失敗に関わらず必ず実行）
+    // 5. Adobe Fontsの準備完了を待ってからローディング画面を消す
     if (loadingScreen) {
-      // ★追加: 強制表示用のスタイルタグをここで確実に無効化する
       const earlyStyle = document.getElementById('early-theme-style');
       if (earlyStyle) earlyStyle.textContent = ''; 
 
-      setTimeout(() => {
+      // ローディング画面をフェードアウトさせる共通関数
+      const hideLoadingScreen = () => {
         loadingScreen.classList.add('fadeout');
         setTimeout(() => {
-          // ★変更: !important 付きで確実に非表示にする
           loadingScreen.style.setProperty('display', 'none', 'important');
         }, 1000);
-      }, 1000);
+      };
+
+      const htmlEl = document.documentElement;
+      
+      // 既にフォントの読み込みが完了している場合（wf-active か wf-inactive が付いている）
+      if (htmlEl.classList.contains('wf-active') || htmlEl.classList.contains('wf-inactive')) {
+        hideLoadingScreen();
+      } else {
+        // まだ読み込み中の場合は、完了の合図（クラス変更）を監視する
+        const observer = new MutationObserver((mutations, obs) => {
+          if (htmlEl.classList.contains('wf-active') || htmlEl.classList.contains('wf-inactive')) {
+            obs.disconnect(); // 監視を終了
+            hideLoadingScreen();
+          }
+        });
+        observer.observe(htmlEl, { attributes: true, attributeFilter: ['class'] });
+        
+        // 通信エラー等に備えた保険（最大3秒で強制的にローディングを消す）
+        setTimeout(() => {
+          observer.disconnect();
+          hideLoadingScreen();
+        }, 3000);
+      }
     }
   }
 }
