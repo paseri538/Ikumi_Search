@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+
+  <script>
+    (function() {
+      try {
+        const theme = localStorage.getItem("site_theme_v1") || 'light';
+        let color = '#f9fafe';
+        let statusBarStyle = 'default';
+        let bodyBg = '';
+        let ballColor = '';
+
+        switch (theme) {
+          case 'dark':
+            color = '#22272e';
+            statusBarStyle = 'black-translucent';
+            bodyBg = color;
+            document.documentElement.classList.add('dark-mode'); // ★追加
+            break;
+          case 'red':
+            color = '#e60046';
+            statusBarStyle = 'black-translucent';
+            bodyBg = color;
+            ballColor = '#ffffff';
+            document.documentElement.classList.add('theme-red'); // ★追加
+            break;
+        }
+
+        document.write('<meta name="theme-color" id="theme-color-meta" content="' + color + '">');
+        document.write('<meta name="apple-mobile-web-app-status-bar-style" id="status-bar-style" content="' + statusBarStyle + '">');
+
+        let styleContent = '';
+        if (bodyBg) {
+          styleContent += 'html, body, #loading-screen { background-color: ' + bodyBg + ' !important; }';
+        }
+        if (ballColor) {
+          styleContent += '.loading-ball { background-color: ' + ballColor + ' !important; }';
+        }
+
+        // CSSファイルの読み込みを待たずに、強制的にロゴを表示状態にします
+        styleContent += `
+          #loading-screen { opacity: 1 !important; visibility: visible !important; display: flex !important; }
+          #loading-logo { opacity: 1 !important; visibility: visible !important; }
+        `;
+        // ▲▲▲ ここまで ▲▲▲
+        
+        if (styleContent) {
+          document.write('<style id="early-theme-style">' + styleContent + '</style>');
+        }
+      } catch (e) {
+        console.error("Early theme application failed:", e);
+      }
+    })();
+  </script>
+
+  <link rel="preload" as="image" href="logo.webp" type="image/webp">
+  <link rel="preload" as="image" href="logo.png">
+  <title>長谷川育美非公式サイト(検) - 「長谷川育美公式ラジオ(決)」非公式検索エンジン</title>
+  
+  <meta name="color-scheme" content="dark light">
+
+<meta property="og:title" content="長谷川育美非公式サイト(検)" />
+<meta property="og:description" content="長谷川育美公式ラジオ(決)のエピソードをカテゴリ・コーナー・キーワードなどでサクッと検索。" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://ikumi-searchtheradio.com/" />
+<meta property="og:image" content="https://ikumi-searchtheradio.com/ogp_img.jpg?v=1" />
+
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+
+<meta property="og:site_name" content="長谷川育美非公式サイト(検)" />
+<meta property="og:locale" content="ja_JP" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="長谷川育美非公式サイト(検)" />
+<meta name="twitter:description" content="長谷川育美公式ラジオ(決)のエピソードをカテゴリ・コーナー・キーワードなどでサクッと検索。" />
+<meta name="twitter:image" content="https://ikumi-searchtheradio.com/ogp_img.jpg?v=1" />
+
+<link rel="canonical" href="https://ikumi-searchtheradio.com/" />
+<meta name="description" content="長谷川育美公式ラジオ(決)のエピソードをカテゴリ・コーナー・キーワードなどでサクッと検索できる非公式サイト。" />
+
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png?v=3">
+<link rel="icon" type="image/png" sizes="16x16" href="./favicon-16.png?v=3">
+<link rel="icon" href="./favicon.ico?v=3"><link rel="apple-touch-icon" href="./apple-touch-icon.png" sizes="180x180">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="育美ラジオ検">
+
+
+<link rel="manifest" href="./site.webmanifest?v=20260311a">
+
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"></noscript>
+
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="preconnect" href="https://code.jquery.com" crossorigin>
+<link rel="preconnect" href="https://i.ytimg.com" crossorigin>
+
+<script>
+  (function(d) {
+    var config = {
+      kitId: 'bmo6cgb',
+      scriptTimeout: 3000,
+      async: true
+    },
+    h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+  })(document);
+</script>
+  <link href="style.css?v=20260311a" rel="stylesheet" />
+
+</head>
+<body>
+
+<div id="loading-screen" style="position:fixed;z-index:9999;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+  <picture>
+    <source srcset="logo.webp" type="image/webp">
+    <img src="logo.png" alt="logo" id="loading-logo" style="width:420px;max-width:85vw;" decoding="sync">
+  </picture>
+  <span class="visually-hidden">Loading...</span>
+</div>
+
+
+<button id="theme-toggle-btn" aria-label="テーマ切替"><i class="fa-solid fa-palette"></i></button>
+
+  <div class="sticky-search-area" aria-label="検索とフィルター">
+    <div class="search-card">
+<div class="search-row search-row-keyword">
+        <div class="search-input-wrapper">
+        <input type="text" id="searchBox" class="form-control searchbox-input"
+          placeholder="キーワード検索"
+          aria-label="検索キーワード" autocomplete="off" />
+        <button id="clearSearchBtn" class="clear-search-btn" aria-label="検索キーワードをクリア" hidden>
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <button id="mainSearchBtn" class="main-search-btn" aria-label="検索">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+        </div>
+        <div id="autocomplete" class="autocomplete" role="listbox" aria-label="検索候補" hidden></div>
+      </div>
+      <div class="search-row search-row-controls">
+        <button class="btn" id="filterToggleBtn" type="button" aria-expanded="false" aria-pressed="false" tabindex="0" title="フィルター条件を選択">
+          <i class="fa fa-filter"></i>
+        </button>
+        
+        <button class="icon-btn" id="favOnlyToggleBtn" aria-pressed="false" title="お気に入りだけ表示">
+  <i class="fa-regular fa-star"></i><span>お気に入り</span>
+</button>
+
+<button class="icon-btn" id="randomBtn" title="ランダムで1本開く">
+  <i class="fa fa-shuffle"></i><span>ランダム</span>
+</button>
+
+
+        <button class="reset-btn" id="mainResetBtn" onclick="resetSearch()" title="すべてリセット" tabindex="0">リセット</button>
+        <span class="sort-wrapper">
+          <select id="sortSelect" class="form-select searchbox-select" aria-label="並び替え" title="並び替え">
+            <option value="newest">公開日時が新しい順</option>
+            <option value="oldest">公開日時が古い順</option>
+            <option value="longest">動画時間が長い順</option>
+            <option value="shortest">動画時間が短い順</option>
+          </select>
+        </span>
+        
+        </div>
+    </div>
+
+    <div class="results-count-under-bar" aria-label="検索結果概要">
+      <span id="fixedResultsCount">表示数：0件</span>
+    </div>
+
+    <div class="filters-bar" id="filtersBar" aria-label="選択中のフィルター"></div>
+  </div>
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <div id="filterDrawer" aria-modal="true" role="dialog" aria-label="詳細フィルター">
+    
+    <div class="filter-section">
+      <div class="filter-title">📂 カテゴリ検索</div>
+      <div class="filter-grid" id="categoryButtonGroup" role="group" aria-label="カテゴリフィルター">
+        <button class="btn-category" data-category="ラジオ" aria-pressed="false">ラジオ</button>
+        <button class="btn-category" data-category="動画" aria-pressed="false">動画</button>
+        <button class="btn-category" data-category="ゲスト" aria-pressed="false">ゲスト</button>
+        <button class="btn-category" data-category="地上波" aria-pressed="false">地上波</button>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">📅 公開年検索</div>
+      <div id="yearButtonGroup" class="filter-grid" role="group" aria-label="公開年フィルター">
+        <button class="btn-year" data-year="2024" aria-pressed="false">2024</button>
+        <button class="btn-year" data-year="2025" aria-pressed="false">2025</button>
+        <button class="btn-year" data-year="2026" aria-pressed="false">2026</button>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">🎬 出演作品名検索</div>
+      <div class="filter-grid" style="display: block; grid-template-columns: none;">
+        <div class="select-wrapper">
+          <select id="worksSelect" class="form-select searchbox-select" style="width: 100%; cursor: pointer;" aria-label="出演作品を選択">
+            <option value="">---</option>
+            </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">📻 コーナー検索</div>
+      <div id="cornerButtonGroup" class="filter-grid" role="group" aria-label="コーナーフィルター">
+        <button class="btn-corner" data-corner="長谷川育美資料館" aria-pressed="false">長谷川育美資料館</button>
+        <button class="btn-corner" data-corner="フォトメモリー" aria-pressed="false">フォトメモリー</button>
+        <button class="btn-corner" data-corner="長谷川育美偏見撲滅委員会" aria-pressed="false">長谷川育美偏見撲滅委員会</button>
+        <button class="btn-corner" data-corner="スペシャルラジオドラマ" aria-pressed="false">スペシャルラジオドラマ</button>
+        <button class="btn-corner" data-corner="育美のお手元" aria-pressed="false">育美のお手元</button>
+        <button class="btn-corner" data-corner="あなたの長谷川育美はどこから？" aria-pressed="false">あなたの長谷川育美はどこから？</button>
+        <button class="btn-corner" data-corner="長谷川育美、早くあるある聞きたい" aria-pressed="false">長谷川育美、早くあるある聞きたい</button>
+        <button class="btn-corner" data-corner="これって私だけ？" aria-pressed="false">これって私だけ？</button>
+        </div>
+    </div>
+  
+    <div class="drawer-footer" role="group" aria-label="フィルター操作">
+      <button id="drawerCloseBtn" type="button" class="drawer-close-btn" title="フィルターを閉じる"
+        onclick="if(window.toggleFilterDrawer){window.toggleFilterDrawer(false);} else if(window.closeDrawer){window.closeDrawer();}">
+        <i class="fa fa-xmark"></i><span> 閉じる</span>
+      </button>
+    </div>
+</div>
+
+  <div class="main-content" id="mainContent">
+    <ul id="results" class="list-unstyled"></ul>
+    <div class="pagination-area" id="paginationArea"></div>
+   
+    <div id="aboutModal" class="modal-overlay">
+      <div id="aboutModalContent">
+        <button id="aboutCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+        <picture>
+          <source srcset="logo.webp" type="image/webp">
+          <img src="logo.png" alt="logo" class="about-logo"/>
+        </picture>
+        <div class="about-title">このサイトについて</div>
+        <div class="about-body">
+          <br>
+          「長谷川育美非公式サイト(検)」は<br>
+          声優・長谷川育美さんの初ソロ冠ラジオ番組<br>「長谷川育美公式ラジオ(決)」のエピソード情報を<br>簡単・高速に検索できる非公式サイトです。<br>
+          <br>
+          カテゴリやコーナー名、公開年などで<br>絞り込み・キーワード検索が可能です。<br>
+          <br>
+          ※本サイトはファンによる個人制作です。<br>
+          著作権は各権利者様に帰属します。
+        </div>
+      </div>
+    </div>
+
+   <section id="radio-history" class="history-section" aria-label="ラジオの歴史">
+  <button class="history-toggle" id="historyToggle"
+          aria-haspopup="dialog" aria-expanded="false" aria-controls="historyModal">
+    <span class="icon">📻</span>
+    <span class="title">『ラジオの歴史』</span>
+  </button>
+
+  <button class="history-toggle" id="onshotToggle" style="margin-top: 12px;">
+    <span class="icon">📷</span>
+    <span class="title">『スタジオオンショット』</span>
+  </button>
+  <div class="share-buttons" id="shareButtons">
+
+  <div class="share-buttons" id="shareButtons">
+    <a id="shareX" class="share-btn" href="#" aria-label="Xでシェア" target="_blank" rel="noopener">
+      <i class="fa-brands fa-x-twitter" aria-hidden="true"></i>
+    </a>
+    <a id="shareLINE" class="share-btn" href="#" aria-label="LINEでシェア" target="_blank" rel="noopener">
+      <i class="fa-brands fa-line" aria-hidden="true"></i>
+    </a>
+    <a id="shareFB" class="share-btn" href="#" aria-label="Facebookでシェア" target="_blank" rel="noopener">
+      <i class="fa-brands fa-facebook" aria-hidden="true"></i>
+    </a>
+  </div>
+</section>
+
+<div id="historyModal" class="modal-overlay" role="dialog" aria-modal="true"
+     aria-labelledby="historyModalTitle" hidden aria-label="ラジオの歴史">
+  <div class="modal-content history-modal" role="document">
+    <div class="modal-header">
+      <h2 id="historyModalTitle" class="modal-title">ラジオの歴史</h2>
+      <button class="modal-close" id="historyCloseBtn" aria-label="閉じる">
+  <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+</button>
+    </div>
+
+    <div class="history-body" id="historyBody">
+      <div class="history-sticky-year" id="historyStickyYear" aria-hidden="true"></div>
+      <div id="historyTimeline" class="history-timeline" aria-live="polite"></div>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  ©TOKYO FM Broadcasting Co., Ltd. All rights reserved.<br>©DWANGO Co., Ltd.<br>
+      <a href="https://x.com/paseri_538" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">Developed by paseri_538</a>
+      <span class="footer-sep">・</span>
+      <a href="#" id="aboutSiteLink" style="color:inherit;text-decoration:underline;">このサイトについて</a>
+    </footer>
+  </div>
+
+  
+  <script src="main.js?v=20260311a" defer></script>
+
+  <script>
+  // ---- Service Worker register (network-first) ----
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/sw.js?20260311a').then(function(reg) {
+        return navigator.serviceWorker.ready;
+      }).then(function(reg) {
+        if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+        reg.addEventListener('updatefound', function () {
+          const nw = reg.installing;
+          if (nw) nw.addEventListener('statechange', function () {
+            if (nw.state === 'installed') reg.waiting && reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+          });
+        });
+      }).catch(console.error);
+    });
+  }
+  </script>
+<div id="floating-theme-panel" class="floating-panel">
+  <button class="theme-btn" data-theme="light" title="ライトテーマ" style="background-color: #f9fafe;"></button>
+  <button class="theme-btn" data-theme="dark" title="ダークテーマ" style="background-color: #22272e;"></button>
+  <button class="theme-btn" data-theme="red" title="レッドテーマ" style="background-color: #e60046;"></button>
+</div>
+
+<div id="photo-links-modal">
+  <div class="photo-links-content">
+    <button class="close-modal-btn" aria-label="閉じる" onclick="document.getElementById('photo-links-modal').classList.remove('active')">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <ul id="photo-links-list"></ul>
+  </div>
+</div>
+
+</body>
+</html>
