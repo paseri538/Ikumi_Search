@@ -124,7 +124,7 @@ body {
   border-radius: 0.65em; height: 2.5em;
   
   /* ★修正: 矢印のスペース確保 (右パディングを 2.5em に変更) */
-  padding: 0.18em 2.5em 0.18em 1em; 
+  padding: 0.18em 1.8em 0.18em 1em; 
 
   border: 1.1px solid #e3e3ec;
   
@@ -165,9 +165,8 @@ body {
 }
 @media (max-width: 600px) {
   .search-card { max-width: 100vw; border-radius: 9px; }
-  .search-row-keyword { margin-bottom: 4px; }
   .search-row-controls { gap: 5px; }
-  .results-count-under-bar { font-size:1em; padding-left:0.1em;}
+  .results-count-under-bar { padding-left:0.1em;}
   .sort-wrapper { flex: 2 1 90px;}
 }
 .filters-bar {
@@ -1456,8 +1455,6 @@ body.dark-mode .share-btn:focus-visible {
     /* PC版と行間の感覚を合わせるため1.2に戻します */
     line-height: 1.2;
     /* h5自体の下の余白は無くし、上の.episode-meta側で管理します */
-    margin-bottom: 0 !important;
-    /* この要素の最低限の高さを指定していた設定を削除しました */
   }
 }
 
@@ -3149,10 +3146,6 @@ html {
 /* ★★★ スマホ表示 (幅 767px 以下) の調整エリア ★★★ */
 /* ======================================================================== */
 @media (max-width: 767px) {
-  .episode-item {
-    padding: 15px 12px !important; 
-  }
-
   /* --- サムネイル (幅120px / 高さ67.5px) --- */
   .episode-item .thumbnail {
     width: 130px; 
@@ -3164,7 +3157,7 @@ html {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 67.5px; 
+    height: 73px; /* ★ サムネイルの高さに固定します */
   }
 
   /*
@@ -3187,6 +3180,7 @@ html {
     line-height: 1.25;
     display: block !important;
     width: 100% !important;
+    min-height: 1.1rem;
   }
 
   /*
@@ -3739,6 +3733,8 @@ html.is-standalone .sticky-search-area {
 
 /* --- メインコンテンツを画面いっぱいに広げる設定 --- */
 html.is-standalone .main-content {
+  padding-top: calc(var(--header-offset) - 0px) !important;
+
   padding-left: max(15px, var(--safe-left));
   padding-right: max(15px, var(--safe-right));
 
