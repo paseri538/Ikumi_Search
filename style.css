@@ -3733,7 +3733,7 @@ html.is-standalone .sticky-search-area {
 
 /* --- メインコンテンツを画面いっぱいに広げる設定 --- */
 html.is-standalone .main-content {
-  padding-top: calc(var(--header-offset) - 0px) !important;
+  padding-top: calc(var(--header-offset) - 1px) !important;
 
   padding-left: max(15px, var(--safe-left));
   padding-right: max(15px, var(--safe-right));
