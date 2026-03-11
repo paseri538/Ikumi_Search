@@ -465,6 +465,44 @@ async function loadExternalData() {
       }
     });
 
+    // ====================================================================
+    // ★追加: Webフォント(Adobe Fonts)の動的サブセッティング対策
+    // 検索候補などで後から生成される文字にフォントが適用されない現象を防ぐため、
+    // 全データに含まれる文字を抽出し、透明な要素としてDOMに配置して事前ロードさせます。
+    // ====================================================================
+    const allChars = new Set();
+    
+    // エピソードデータから文字を抽出
+    data.forEach(ep => {
+      const text = (ep.title || '') + 
+                   (Array.isArray(ep.guest) ? ep.guest.join('') : (ep.guest || '')) + 
+                   (Array.isArray(ep.keywords) ? ep.keywords.join('') : '');
+      for (const char of text) allChars.add(char);
+    });
+    
+    // キーワードや読み仮名データから文字を抽出
+    for (const key in CUSTOM_READINGS) {
+      for (const char of key) allChars.add(char);
+      CUSTOM_READINGS[key].forEach(v => {
+        for (const char of v) allChars.add(char);
+      });
+    }
+
+    // 抽出した全文字を結合
+    const charStr = Array.from(allChars).join('');
+    
+    // 画面外に透明な要素として配置
+    const hiddenFontDiv = document.createElement('div');
+    hiddenFontDiv.style.cssText = 'position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;z-index:-1;';
+    
+    // ★修正：70-pro（標準）と 80-pro（太字）の両方のファミリーを個別に明示して強制ロードさせる
+    hiddenFontDiv.innerHTML = `
+      <span style="font-family: fot-udkakugoc70-pro, sans-serif;">${charStr}</span>
+      <span style="font-family: fot-udkakugoc80-pro, sans-serif;">${charStr}</span>
+    `;
+    document.body.appendChild(hiddenFontDiv);
+    // ====================================================================
+
     console.log("All data loaded successfully.");
   } catch (error) {
     console.error("Failed to load external data:", error);

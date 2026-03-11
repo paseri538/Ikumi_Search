@@ -3149,6 +3149,10 @@ html {
 /* ★★★ スマホ表示 (幅 767px 以下) の調整エリア ★★★ */
 /* ======================================================================== */
 @media (max-width: 767px) {
+  .episode-item {
+    padding: 15px 12px !important; 
+  }
+
   /* --- サムネイル (幅120px / 高さ67.5px) --- */
   .episode-item .thumbnail {
     width: 130px; 
@@ -5166,6 +5170,7 @@ body.dark-mode .card-title {
   /* ★全デバイスで「...」による省略を有効化 */
   display: -webkit-box !important;
   -webkit-line-clamp: 2 !important; /* 2行制限 */
+  line-clamp: 2 !important;
   -webkit-box-orient: vertical !important;
   overflow: hidden !important;
   
@@ -5549,10 +5554,7 @@ html.is-standalone #createPlaylistBtn {
   }
 }
 
-/* === カメラボタン (お気に入りボタンの左隣に配置) === */
-.episode-item {
-  position: relative; /* 念のため確認 */
-}
+
 
 .photo-link-btn {
   position: absolute;
@@ -5610,67 +5612,7 @@ body.dark-mode .photo-link-btn {
   background: #555; /* グレーなど */
 }
 
-/* =================================================== */
-/* ★★★ フォトメモリー機能用スタイル (完全版) ★★★ */
-/* =================================================== */
 
-/* 1. カメラボタンのデザイン
-   お気に入りボタン(.fav-btn)と位置・サイズ・色を完全に統一します。
-*/
-.photo-link-btn {
-  position: absolute;
-  bottom: 10px;
-  right: 10px; /* お気に入りボタンと同じ位置 */
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  
-  /* ▼ 白背景・薄いグレー枠・濃いグレーのアイコン */
-  background-color: #ffffff;
-  border: 1px solid #e6e6f3;
-  color: #333742;
-  
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 2;
-  box-shadow: 0 2px 10px -6px rgba(0,0,0,0.2);
-  transition: transform 0.12s, box-shadow 0.12s, background 0.12s;
-  
-  font-family: inherit;
-  font-size: 16px; /* アイコンサイズ */
-}
-
-/* ホバー・アクティブ時の挙動 */
-.photo-link-btn:active {
-  transform: scale(0.95);
-  background-color: #f0f0f0;
-}
-@media (hover: hover) {
-  .photo-link-btn:hover {
-    transform: scale(1.06);
-    background-color: #f9f9f9;
-    color: #111;
-  }
-}
-
-/* ダークモード時のカメラボタン (カード色に合わせる) */
-body.dark-mode .photo-link-btn {
-  background-color: #2a2f37;
-  border-color: #41505f;
-  color: #e7eef6;
-}
-body.dark-mode .photo-link-btn:active {
-  background-color: #333b45;
-}
-
-/* カラーテーマ適用時も、カメラボタンは白(カード色)を維持 */
-body[class*="theme-"] .photo-link-btn {
-  background-color: var(--card-bg) !important;
-  border-color: var(--history-card-bd) !important;
-  color: var(--muted) !important;
-}
 
 
 /* =================================================== */
@@ -6133,5 +6075,147 @@ body[class*="theme-"] #filterDrawer .filter-grid select:focus {
     background-color: var(--filter-btn-active) !important;
     border-color: var(--btn-main) !important;
     color: var(--text-color) !important;
+  }
+}
+
+/* =================================================== */
+/* ★★★ メタ情報（動画時間）の非表示による改行防止 ★★★ */
+/* =================================================== */
+
+/* 1. タブレット等で2列表示になった直後で、カード幅が狭いとき */
+@media (min-width: 768px) and (max-width: 840px) {
+  .meta-duration {
+    display: none !important;
+  }
+}
+
+/* 2. PC版で左サイドバーが出現し、右側のカード領域が圧迫されるとき */
+@media (min-width: 992px) and (max-width: 1100px) {
+  .meta-duration {
+    display: none !important;
+  }
+}
+
+/* 3. コンパクトなスマホなどで幅が足りないとき */
+@media (max-width: 370px) {
+  .meta-duration {
+    display: none !important;
+  }
+}
+
+/* =================================================== */
+/* ★★★ PWA版 PCサイズ(992px以上)をWeb版と完全一致させる ★★★ */
+/* =================================================== */
+@media (min-width: 992px) {
+  /* 1. ボトムナビを完全に非表示 */
+  html.is-standalone .pwa-bottom-nav {
+    display: none !important;
+  }
+
+  /* 2. PWA特有のヘッダー崩れ（横並び化・ブロック化など）をリセットし、Web版に戻す */
+  html.is-standalone .search-card {
+    align-items: stretch !important;
+    gap: 0 !important;
+    padding-bottom: 0.36em !important;
+  }
+  html.is-standalone .search-row-keyword {
+    width: 100% !important;
+    flex: none !important;
+    margin-bottom: 7px !important;
+  }
+  html.is-standalone .search-row-controls {
+    width: 100% !important;
+    flex: none !important;
+    display: flex !important; /* ブロック化を解除 */
+    margin-top: 0 !important;
+    gap: 10px !important;
+  }
+
+  /* 3. PWAモードで隠されていた上部ボタンを復活 */
+  /* ※ フィルタボタンはPC版では元々非表示（左サイドバーに出る）なので除外 */
+  html.is-standalone .search-row-controls #favOnlyToggleBtn,
+  html.is-standalone .search-row-controls #randomBtn,
+  html.is-standalone .search-row-controls #mainResetBtn {
+    display: inline-flex !important;
+  }
+
+  /* 4. 並び替え（ソート）をWeb版の配置に戻す */
+  html.is-standalone .search-row-controls .sort-wrapper {
+    width: auto !important;
+    flex: 1 1 0 !important;
+  }
+  html.is-standalone .search-row-controls .reset-btn + .sort-wrapper {
+    margin-left: auto !important;
+  }
+
+  /* 5. テーマ切替ボタン（カラーパレット）を右下の標準位置に戻す */
+  html.is-standalone #theme-toggle-btn {
+    position: fixed !important;
+    top: auto !important;
+    left: auto !important;
+    right: 18px !important;
+    bottom: 18px !important;
+    opacity: 1 !important;
+    width: 55px !important;
+    height: 55px !important;
+    margin: 0 !important;
+    border-radius: 50% !important;
+  }
+  
+  html.is-standalone #theme-toggle-btn i {
+    font-size: 30px !important;
+  }
+  
+  html.is-standalone #theme-toggle-btn span {
+    display: none !important;
+  }
+
+  html.is-standalone .floating-panel {
+    bottom: 80px !important;
+    left: auto !important;
+    right: 18px !important;
+    transform: translateY(10px) scale(0.95) !important;
+    flex-direction: column !important;
+    padding: 14px 10px !important;
+    border-radius: 999px !important;
+    transform-origin: bottom right !important;
+  }
+  
+  html.is-standalone .floating-panel.show {
+    transform: translateY(0) scale(1) !important;
+  }
+
+  /* 6. メインコンテンツの下部余白をWeb版に戻す */
+  html.is-standalone .main-content {
+    padding-bottom: 20px !important; 
+    min-height: auto !important;
+  }
+}
+
+/* =================================================== */
+/* ★★★ フォトリンクモーダル：ボタンの改行防止とサイズ自動調整 ★★★ */
+/* =================================================== */
+
+/* 1. 絶対に改行させない設定 */
+.photo-link-item {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* テキスト部分のはみ出し制御 */
+.photo-link-item span {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* 2. スマホ画面（480px以下）での文字サイズと余白の自動調整 */
+@media (max-width: 480px) {
+  .photo-link-item {
+    /* 画面幅に合わせてフォントサイズを滑らかに縮小（最小11px〜最大15px） */
+    font-size: clamp(11px, 3.6vw, 15px) !important;
+    /* 左右の余白を少し詰めて、文字の表示領域を広げる */
+    padding: 12px 10px !important;
   }
 }
