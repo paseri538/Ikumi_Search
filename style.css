@@ -5376,15 +5376,17 @@ body[class*="theme-"] .btn-category[aria-pressed="true"] {
   line-height: 1.1 !important;
 }
 
-/* 追加：出演作品検索のプルダウン文字を太字にする */
-#animeSelect {
+/* 追加：出演作品・人物名検索のプルダウン文字を太字にする */
+#worksSelect,
+#personSelect {
   font-family: fot-udkakugoc80-pro, 'Segoe UI', system-ui, -apple-system, sans-serif;
   font-weight: 700 !important;
   color: var(--text-color);
 }
 
 /* 追加：プルダウンの選択肢も太字に */
-#animeSelect option {
+#worksSelect option,
+#personSelect option {
   font-family: fot-udkakugoc80-pro, 'Segoe UI', system-ui, -apple-system, sans-serif;
   font-weight: 700 !important;
 }

@@ -13,6 +13,10 @@ let selectedGuests = [];
 let selectedCorners = [];
 let selectedYears = [];
 let selectedWorks = ""; 
+// ▼▼▼ 追加 ▼▼▼
+let selectedPerson = "";
+let PERSON_LIST = [];
+// ▲▲▲ 追加 ▲▲▲
 let currentPage = 1;
 const pageSize = 20;
 let lastResults = [];
@@ -125,7 +129,7 @@ function kanaToRomaji(str) {
     'ぎゃ':'gya','ぎゅ':'gyu','ぎょ':'gyo',
     'じゃ':'ja','じゅ':'ju','じょ':'jo',
     'びゃ':'bya','びゅ':'byu','びょ':'byo',
-    'ぴゃ':'pya','ぴゅ':'pyu','ぴょ':'pyo',
+    'ぴゃ':'pya','ぴゅ':'pyo',
     'si':'shi', 'ti':'chi', 'tu':'tsu', 'hu':'fu', 'zi':'ji',
     'xtsu': 'tu'
   };
@@ -365,13 +369,17 @@ async function loadExternalData() {
       fetch('history.json'),
       fetch('photomemory.json'),
       fetch('dokokara.json'),
-      fetch('onshot.json').catch(() => null) // ★★★ ここに追加 ★★★
+      fetch('onshot.json').catch(() => null)
     ]);
     const episodesData = await episodesRes.json();
     const readingsData = await readingsRes.json();
     const keywordsData = await keywordsRes.json();
     historyData = await historyRes.json();
     
+    // ▼▼▼ 追加：readings.jsonから人物名のリストを取得 ▼▼▼
+    PERSON_LIST = Object.keys(readingsData);
+    // ▲▲▲ 追加 ▲▲▲
+
     try {
         photoMemoryData = await pmRes.json();
     } catch (e) {
@@ -380,13 +388,13 @@ async function loadExternalData() {
     }
 
     try {
-    dokokaraData = await dkRes.json();
-  } catch (e) {
-    console.warn("dokokara.json loading failed", e);
-    dokokaraData = {};
-  }
+      dokokaraData = await dkRes.json();
+    } catch (e) {
+      console.warn("dokokara.json loading failed", e);
+      dokokaraData = {};
+    }
 
-  try {
+    try {
       if (osRes) onshotData = await osRes.json();
     } catch (e) {
       console.warn("onshot.json loading failed", e);
@@ -559,6 +567,36 @@ function populateWorksFilter() {
   });
 }
 
+// ▼▼▼ ここから追加：人物名プルダウンの生成 ▼▼▼
+function populatePersonFilter() {
+  const select = document.getElementById('personSelect');
+  if (!select) return;
+
+  const getReading = (text) => {
+    // readings.jsonの配列の最後の要素（ひらがな）をソートの基準にする
+    if (CUSTOM_READINGS[text] && CUSTOM_READINGS[text].length > 0) {
+      return normalize(CUSTOM_READINGS[text][CUSTOM_READINGS[text].length - 1]);
+    }
+    return normalize(text);
+  };
+
+  const sortedPersons = [...PERSON_LIST].sort((a, b) => {
+    return getReading(a).localeCompare(getReading(b), "ja");
+  });
+
+  while (select.options.length > 1) {
+    select.remove(1);
+  }
+
+  sortedPersons.forEach(person => {
+    const option = document.createElement('option');
+    option.value = person;
+    option.textContent = person;
+    select.appendChild(option);
+  });
+}
+// ▲▲▲ ここまで追加 ▲▲▲
+
 async function initializeApp() {
   const loadingScreen = document.getElementById('loading-screen');
   const loadingLogo = document.getElementById('loading-logo'); 
@@ -572,6 +610,7 @@ async function initializeApp() {
 
     // 3. 各種セットアップ
     populateWorksFilter();
+    populatePersonFilter(); // ★追加
     formatYearButtons();
     setupModals();
     setupShareButtons();
@@ -718,6 +757,16 @@ function getFilteredData(query) {
     res = res.filter(it => selectedGuests.some(g => it.searchText.includes(normalize(g))));
   }
 
+  // ▼▼▼ 追加：人物名フィルタ（本名やあだ名が含まれていればヒット） ▼▼▼
+  if (selectedPerson) {
+    const searchWords = [normalize(selectedPerson)];
+    if (CUSTOM_READINGS[selectedPerson]) {
+      CUSTOM_READINGS[selectedPerson].forEach(r => searchWords.push(normalize(r)));
+    }
+    res = res.filter(it => searchWords.some(word => it.searchText.includes(word)));
+  }
+  // ▲▲▲ 追加 ▲▲▲
+
   // コーナーフィルタ
   if (selectedCorners.length) res = res.filter(it => selectedCorners.some(c => it.searchText.includes(normalize(c))));
   
@@ -791,6 +840,14 @@ function resetFilters() {
   if (worksSelect) {
     worksSelect.value = ""; 
   }
+
+  // ▼▼▼ 追加：人物名のリセット ▼▼▼
+  selectedPerson = ""; 
+  const personSelect = document.getElementById('personSelect');
+  if (personSelect) {
+    personSelect.value = ""; 
+  }
+  // ▲▲▲ 追加 ▲▲▲
 
   updateFilterButtonStyles();
   search();
@@ -931,6 +988,19 @@ arr.slice(startIdx, endIdx).forEach((it, index) => {
       const works = Array.isArray(it.works) ? it.works : [it.works || ""];
       const targetWork = works.find(w => stripTimeSuffix(w) === selectedWorks);
       if (targetWork) hit = parseKeywordTime(targetWork);
+    }
+
+    // 人物名フィルタ時のタイムスタンプ判定 ▼▼▼
+    if (!hit && selectedPerson) {
+      // 本名で探す
+      hit = findHitTime(it, selectedPerson);
+      // 見つからなければ、あだ名・別名でも探す
+      if (!hit && CUSTOM_READINGS[selectedPerson]) {
+        for (const alias of CUSTOM_READINGS[selectedPerson]) {
+          hit = findHitTime(it, alias);
+          if (hit) break;
+        }
+      }
     }
 
     const finalLink = hit ? withTimeParam(it.link, hit.seconds) : it.link;
@@ -1080,6 +1150,14 @@ function updateActiveFilters() {
              </button>`;
   }
 
+  // ▼▼▼ 追加：人物名のタグ表示 ▼▼▼
+  if (selectedPerson) {
+    html += `<button class="filter-tag" tabindex="0" aria-label="人物フィルタ解除 ${selectedPerson}" data-type="person" data-value="${selectedPerson}">
+               <i class="fa fa-user"></i> ${selectedPerson} <i class="fa fa-xmark"></i>
+             </button>`;
+  }
+  // ▲▲▲ 追加 ▲▲▲
+
   selectedGuests.forEach(g => { 
     html += `<button class="filter-tag" tabindex="0" aria-label="ゲストフィルタ解除 ${g}" data-type="guest" data-value="${g}"><i class="fa fa-user"></i> ${g} <i class="fa fa-xmark"></i></button>`;
   });
@@ -1156,6 +1234,7 @@ function buildURLFromState({ method = 'push' } = {}) {
   selectedYears.forEach(y => params.append('y', String(y)));
 
   if (selectedWorks) params.set('works', selectedWorks);
+  if (selectedPerson) params.set('person', selectedPerson); // ★追加
 
   const sort = document.getElementById('sortSelect').value;
   if (sort !== 'newest') params.set('sort', sort);
@@ -1182,6 +1261,13 @@ function applyStateFromURL({ replace = false } = {}) {
   selectedWorks = params.get('works') || "";
   const worksSelect = document.getElementById('worksSelect');
   if (worksSelect) worksSelect.value = selectedWorks;
+
+  // ▼▼▼ 追加：人物名のURLからの復元 ▼▼▼
+  selectedPerson = params.get('person') || "";
+  const personSelect = document.getElementById('personSelect');
+  if (personSelect) personSelect.value = selectedPerson;
+  // ▲▲▲ 追加 ▲▲▲
+
   document.getElementById('sortSelect').value = params.get('sort') || 'newest';
   showFavoritesOnly = params.get('fav') === '1';
   const favBtn = document.getElementById('favOnlyToggleBtn');
@@ -1324,6 +1410,12 @@ function setupEventListeners() {
         selectedWorks = ""; // 変数をクリア
         document.getElementById('worksSelect').value = ""; // プルダウンを「作品を選択」に戻す
     }
+    // ▼▼▼ 追加：人物名タグの解除イベント ▼▼▼
+    else if (type === 'person') {
+        selectedPerson = "";
+        document.getElementById('personSelect').value = "";
+    }
+    // ▲▲▲ 追加 ▲▲▲
     searchBox.dispatchEvent(new Event('input'));
     updateFilterButtonStyles();
     search();
@@ -1431,6 +1523,18 @@ function setupEventListeners() {
       worksSelect.blur();
     });
   }
+
+  // ▼▼▼ 追加：人物名プルダウン変更時のイベント ▼▼▼
+  const personSelect = document.getElementById('personSelect');
+  if (personSelect) {
+    personSelect.addEventListener('change', (e) => {
+      selectedPerson = e.target.value; 
+      search({ gotoPage: 1 });
+      scrollToResultsTop();
+      personSelect.blur();
+    });
+  }
+  // ▲▲▲ 追加 ▲▲▲
 }
 
 // ... (後略: スクロールロックなど変更なし) ...
