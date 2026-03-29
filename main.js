@@ -573,9 +573,9 @@ function populatePersonFilter() {
   if (!select) return;
 
   const getReading = (text) => {
-    // readings.jsonの配列の最後の要素（ひらがな）をソートの基準にする
+    // readings.jsonの配列の最初の要素（ひらがな）をソートの基準にする
     if (CUSTOM_READINGS[text] && CUSTOM_READINGS[text].length > 0) {
-      return normalize(CUSTOM_READINGS[text][CUSTOM_READINGS[text].length - 1]);
+      return normalize(CUSTOM_READINGS[text][0]); // ★最後の要素から [0] に変更
     }
     return normalize(text);
   };
